@@ -199,7 +199,7 @@ J9::X86::CodeGenerator::beginInstructionSelection()
       //
       int32_t alignmentBoundary = 8;
 
-      TR::Instruction *cursor = self()->generateSwitchToInterpreterPrePrologue(NULL, alignmentBoundary, alignmentMargin);
+      TR::Instruction *cursor = generateSwitchToInterpreterPrePrologue(NULL, alignmentBoundary, alignmentMargin);
       if (TR::Compiler->target.is64Bit())
          {
          // A copy of the first two bytes of the method, in case we need to un-patch them
