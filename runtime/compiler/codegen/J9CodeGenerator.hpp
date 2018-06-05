@@ -156,9 +156,9 @@ public:
    bool hasSignCleans() { return _flags4.testAny(HasSignCleans);}
    void setHasSignCleans() { _flags4.set(HasSignCleans);}
 
-   bool alwaysGeneratesAKnownCleanSign(TR::Node *node) { return false; } // no virt
-   bool alwaysGeneratesAKnownPositiveCleanSign(TR::Node *node) { return false; } // no virt
-   TR_RawBCDSignCode alwaysGeneratedSign(TR::Node *node) { return raw_bcd_sign_unknown; } // no virt
+   OMR_API virtual bool alwaysGeneratesAKnownCleanSign(TR::Node *node) { return false; } // no virt
+   OMR_API virtual bool alwaysGeneratesAKnownPositiveCleanSign(TR::Node *node) { return false; } // no virt
+   OMR_API virtual TR_RawBCDSignCode alwaysGeneratedSign(TR::Node *node) { return raw_bcd_sign_unknown; } // no virt
 
    void foldSignCleaningIntoStore();
    void swapChildrenIfNeeded(TR::Node *store, char *optDetails);
@@ -382,7 +382,7 @@ public:
     *    The number of nodes between a monext and the next monent before
     *    transforming a monitored region with transactional lock elision.
     */
-   int32_t getMinimumNumberOfNodesBetweenMonitorsForTLE() { return 15; }
+   OMR_API virtual int32_t getMinimumNumberOfNodesBetweenMonitorsForTLE() { return 15; }
 
 private:
 
