@@ -218,6 +218,9 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 		}
 		DebugRecursionDetection.getTlDebug().remove();
 	}
+	System.out.println("startPos: " + startPos);
+	System.out.println("acc: " + acc);
+	System.out.println("pDomains: " + pDomains);
 	int length = pDomains == null ? 0 : pDomains.length;
 	if ((null != acc)
 		&& (null != acc.context)
@@ -231,6 +234,7 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 			/*[PR CMVC 197399] Improve checking order */
 			// new behavior introduced by this fix
 			// an ACE is thrown if there is a untrusted PD but without SecurityPermission createAccessControlContext
+			System.out.println("Throwing ace here");
 			throwACE((debug & AccessControlContext.DEBUG_ACCESS_DENIED) != 0, perm, callerPD, true);
 		}
 	}
@@ -248,6 +252,7 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 					/*[ELSE]*/
 					if ((pDomains[length - i - 1] != null) && !pDomains[length - i - 1].implies(perm)) {
 					/*[ENDIF] Sidecar19-SE*/
+						System.out.println("Throwing ace there");
 						throwACE((debug & AccessControlContext.DEBUG_ACCESS_DENIED) != 0, perm, pDomains[length - i - 1], false);
 					}
 				}
