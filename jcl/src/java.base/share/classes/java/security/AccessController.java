@@ -218,9 +218,6 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 		}
 		DebugRecursionDetection.getTlDebug().remove();
 	}
-	System.out.println("startPos: " + startPos);
-	System.out.println("acc: " + acc);
-	System.out.println("pDomains: " + pDomains);
 	int length = pDomains == null ? 0 : pDomains.length;
 	if ((null != acc)
 		&& (null != acc.context)
@@ -402,6 +399,7 @@ public static void checkPermission(Permission perm) throws AccessControlExceptio
 
 		checkPermissionHelper(perm, topACC, activeDC, null, 0, null, objects, debug, 2); // the actual ProtectionDomain element starts at index 2
 	} else {
+		System.out.println("isPreJEP140Format is false");
 		int frameNbr = objects.length / OBJS_ARRAY_SIZE;
 
 		if ((debug != AccessControlContext.DEBUG_DISABLED) && !debugHelperJEP140(objects, perm)) {
@@ -411,6 +409,7 @@ public static void checkPermission(Permission perm) throws AccessControlExceptio
 		AccessCache checked = new AccessCache();
 		for (int j = 0; j < frameNbr; ++j) {
 			AccessControlContext acc = (AccessControlContext) objects[j * OBJS_ARRAY_SIZE];
+			System.out.println("Obtained acc: " + acc);
 			Object[] objPDomains = (Object[]) objects[j * OBJS_ARRAY_SIZE + OBJS_INDEX_PDS];
 			if (checkPermissionHelper(perm, acc, activeDC, objects, j, checked, objPDomains, debug, 1)) { // the actual ProtectionDomain element starts at index 1
 				break;
