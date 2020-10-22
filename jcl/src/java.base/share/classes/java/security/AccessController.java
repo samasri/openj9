@@ -379,6 +379,8 @@ public static void checkPermission(Permission perm) throws AccessControlExceptio
 	}
 
 	Object[] objects = getAccSnapshot(1, false);
+	System.out.println("objects length: " + objects.length);
+	if(objects.length > 0) System.out.println("First one: " + objects[0]);
 	boolean isPreJEP140Format = (0 == objects.length % OBJS_ARRAY_SIZE) ? false : true;
 
 	DomainCombiner activeDC = null;
@@ -393,13 +395,13 @@ public static void checkPermission(Permission perm) throws AccessControlExceptio
 	}
 	
 	if (isPreJEP140Format) {
+		System.out.println("isPreJEP140Format is true");
 		if ((debug != AccessControlContext.DEBUG_DISABLED) && !debugHelperPreJEP140(objects, perm)) {
 			debug = AccessControlContext.DEBUG_ACCESS_DENIED; // Disable DEBUG_ENABLED
 		}
 
 		checkPermissionHelper(perm, topACC, activeDC, null, 0, null, objects, debug, 2); // the actual ProtectionDomain element starts at index 2
 	} else {
-		System.out.println("isPreJEP140Format is false");
 		int frameNbr = objects.length / OBJS_ARRAY_SIZE;
 
 		if ((debug != AccessControlContext.DEBUG_DISABLED) && !debugHelperJEP140(objects, perm)) {
@@ -409,7 +411,6 @@ public static void checkPermission(Permission perm) throws AccessControlExceptio
 		AccessCache checked = new AccessCache();
 		for (int j = 0; j < frameNbr; ++j) {
 			AccessControlContext acc = (AccessControlContext) objects[j * OBJS_ARRAY_SIZE];
-			System.out.println("Obtained acc: " + acc);
 			Object[] objPDomains = (Object[]) objects[j * OBJS_ARRAY_SIZE + OBJS_INDEX_PDS];
 			if (checkPermissionHelper(perm, acc, activeDC, objects, j, checked, objPDomains, debug, 1)) { // the actual ProtectionDomain element starts at index 1
 				break;
