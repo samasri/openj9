@@ -203,13 +203,6 @@ private static void throwACE(boolean debug, Permission perm, ProtectionDomain pD
  */
 private static boolean checkPermissionHelper(Permission perm, AccessControlContext acc, DomainCombiner activeDC, Object[] objects, int frame, AccessCache checked, Object[] objPDomains, int debug, int startPos) {
 	long threadid = java.lang.Thread.currentThread().getId();
-	System.out.println("-------------------- Starting " + perm.getName() + " (" + threadid + ") -------------------->");
-	if(objects != null) {
-		System.out.println("objects length: " + objects.length);
-		System.out.println("First one: " + objects[0]);
-	} else {
-		System.out.println("objects is null");
-	}
 	boolean limitedPermImplied = false;
 	boolean debugEnabled = (debug & AccessControlContext.DEBUG_ENABLED) != 0;
 	ProtectionDomain[] pDomains = generatePDarray(activeDC, acc, objPDomains, debugEnabled, startPos);
@@ -248,13 +241,8 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 			checked = new AccessCache(); /* checked was null initially when Pre-JEP140 format */
 			return AccessControlContext.checkPermissionWithCache(perm, activeDC, pDomains, debug, acc, false, null, null, checked);
 		} else {
-			System.out.println("pDomains: " + pDomains);
 			if (pDomains != null) {
-				System.out.println("  - Length: " + length);
 				for (int i = 0; i < length ; ++i) {
-					System.out.println("Clause 1: " + (pDomains[length - i - 1] != null));
-					if (pDomains[length - i - 1] != null) System.out.println("Clause 2: " + (!pDomains[length - i - 1].impliesWithAltFilePerm(perm)));
-					if (pDomains[length - i - 1] != null) System.out.println("Clause 3: " + (!pDomains[length - i - 1].implies(perm)));
 					// invoke PD within acc.context first
 					/*[IF Sidecar19-SE]*/
 					if ((pDomains[length - i - 1] != null) && !pDomains[length - i - 1].impliesWithAltFilePerm(perm)) {
@@ -276,7 +264,6 @@ private static boolean checkPermissionHelper(Permission perm, AccessControlConte
 			limitedPermImplied = true;
 		}
 	}
-	System.out.println("<-----------------returning " + limitedPermImplied + " -----------------");
 	return limitedPermImplied;
 }
 
@@ -379,6 +366,10 @@ private static boolean debugHelperJEP140(Object[] objects, Permission perm) {
  *              NullPointerException if perm is null
  */
 public static void checkPermission(Permission perm) throws AccessControlException {
+	System.out.println("- Checking permission: " + perm.getName());
+	if(perm.getName().equals("os.name")) {
+		for(StackTraceElement st : (new Exception()).getStackTrace()) System.out.println("  - " + st);
+	}
 	if (perm == null) {
 		throw new NullPointerException();
 	}
